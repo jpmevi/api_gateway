@@ -43,11 +43,6 @@ public class JwtTokenFilterFactory extends AbstractGatewayFilterFactory<Object> 
                 // Obtener el rol del token
                 String role = jwtService.getRoleFromToken(token);
 
-                // Verificar si el rol tiene acceso a esta ruta específica
-                if (!isAuthorized(role, exchange.getRequest())) {
-                    return Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN, "Acceso denegado"));
-                }
-
                 // Configurar una autenticación básica basada en el token
                 AbstractAuthenticationToken auth = new AbstractAuthenticationToken(List.of(new SimpleGrantedAuthority(role))) {
                     @Override
@@ -78,15 +73,5 @@ public class JwtTokenFilterFactory extends AbstractGatewayFilterFactory<Object> 
             return bearerToken.substring(7);
         }
         return null;
-    }
-
-    private boolean isAuthorized(String role, ServerHttpRequest request) {
-        String path = request.getURI().getPath();
-
-        if (path.startsWith("/api/v1/users") && !role.equals(Role.EMPLOYEE.name())) {
-            return false; // Solo 'EMPLOYEE' puede acceder a /api/v1/users
-        }
-
-        return true; // Permitir acceso por defecto
     }
 }
