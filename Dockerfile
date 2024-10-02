@@ -1,5 +1,5 @@
 # Etapa 1: Construcción de la aplicación
-FROM maven:3.9.9-openjdk-22 AS build
+FROM maven:3.9.9-eclipse-temurin:22-jdk-jammy AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
