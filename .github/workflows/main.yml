@@ -35,7 +35,6 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd ${{ matrix.service }}
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }} .
 
       - name: Push Docker image to GCR
