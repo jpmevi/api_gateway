@@ -1,0 +1,42 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - apigw-service
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Build Docker image
+        run: |
+          cd ${{ matrix.service }}
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }} .
+
+      - name: Push Docker image to GCR
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
+
+      - name: Deploy to GKE
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_CLUSTER_ZONE }} --project ${{ secrets.GCP_PROJECT_ID }}
+          kubectl set image deployment/${{ matrix.service }} ${{
+            matrix.service
+          }}=gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.service }}:${{
+            github.sha
+          }} --record
