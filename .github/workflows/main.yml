@@ -17,6 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: print variables
+        run: |
+          echo ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          echo ${{ secrets.GCP_PROJECT_ID }}
+          echo ${{ secrets.dev.GCP_SERVICE_ACCOUNT_KEY }}
+          echo ${{ secrets.dev.GCP_PROJECT_ID }}
+          
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
