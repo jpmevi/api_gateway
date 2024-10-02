@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         service:
-          - apigw-service
+          - src
 
     steps:
       - uses: actions/checkout@v3
