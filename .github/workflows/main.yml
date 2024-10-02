@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         service:
-          - src
+          - apigw
 
     steps:
       - uses: actions/checkout@v3
@@ -40,6 +40,10 @@ jobs:
       - name: Push Docker image to GCR
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push us-east1-docker.pkg.dev/maxi-clone/mc-repository-dev/apigw:${{ github.sha }}
 
       - name: Deploy to GKE
         run: |
