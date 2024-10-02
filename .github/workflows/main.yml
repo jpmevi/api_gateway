@@ -56,11 +56,33 @@ jobs:
           # Actualizar los repositorios e instalar el plugin
           sudo apt-get update && sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
 
+       # Crear o actualizar el deployment
+      - name: Apply Deployment
+        run: |
+          kubectl apply -f <<EOF
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: apigw
+          spec:
+            replicas: 2
+            selector:
+              matchLabels:
+                app: apigw
+            template:
+              metadata:
+                labels:
+                  app: apigw
+              spec:
+                containers:
+                - name: apigw
+                  image: us-east1-docker.pkg.dev/maxi-clone/mc-repository-dev/apigw:${{ github.sha }}
+                  ports:
+                  - containerPort: 8080
+          EOF
+
+      # Actualizar la imagen del Deployment
       - name: Deploy to GKE
         run: |
           gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_CLUSTER_ZONE }} --project ${{ secrets.GCP_PROJECT_ID }}
-          kubectl set image deployment/${{ matrix.service }} ${{
-            matrix.service
-          }}=us-east1-docker.pkg.dev/maxi-clone/mc-repository-dev/${{ matrix.service }}:${{
-            github.sha
-          }} --record
+          kubectl set image deployment/apigw apigw=us-east1-docker.pkg.dev/maxi-clone/mc-repository-dev/apigw:${{ github.sha }} --record
