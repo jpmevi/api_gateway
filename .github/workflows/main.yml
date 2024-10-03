@@ -58,6 +58,7 @@ jobs:
 
       - name: Create/Apply Kubernetes Deployment
         run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_CLUSTER_ZONE }} --project ${{ secrets.GCP_PROJECT_ID }}
           kubectl apply -f ./deployment.yml
           
       - name: Deploy to GKE
