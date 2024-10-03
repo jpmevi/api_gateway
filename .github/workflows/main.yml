@@ -64,3 +64,8 @@ jobs:
           }}=us-east1-docker.pkg.dev/maxi-clone/mc-repository-dev/${{ matrix.service }}:${{
             github.sha
           }} --record
+
+      - name: Expose Service
+        run: |
+          kubectl expose deployment apigw --type=LoadBalancer --name=apigw-svc --port=80 --target-port=8080
+
