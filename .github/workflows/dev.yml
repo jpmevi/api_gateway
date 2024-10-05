@@ -60,13 +60,9 @@ jobs:
         run: |
           gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_CLUSTER_ZONE }} --project ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Create Deployment if not exists
+      - name: Create or Update Deployment and Service
         run: |
-          if ! kubectl get deployment api-gateway; then
-            kubectl apply -f ./deployment.yml
-          else
-            echo "Deployment api-gateway already exists. Skipping creation."
-          fi
+          kubectl apply -f ./deployment.yml
 
       - name: Deploy to GKE
         run: |
@@ -75,11 +71,3 @@ jobs:
           }}=us-east1-docker.pkg.dev/maxi-clone/mc-repository-dev/${{ matrix.service }}:${{
             github.sha
           }} --record
-
-      - name: Expose Service if not exists
-        run: |
-          if ! kubectl get service api-gateway-svc; then
-            kubectl expose deployment api-gateway --type=LoadBalancer --name=api-gateway-svc --port=80 --target-port=8080
-          else
-            echo "Service api-gateway-svc already exists. Skipping expose."
-          fi
