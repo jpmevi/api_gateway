@@ -3,54 +3,11 @@ spring:
     name: api-gateway
   cloud:
     gateway:
-      routes:
-        - id: auth-service
-          uri: http://localhost:8081
-          predicates:
-            - Path=/api/v1/auth/**
-        - id: users-service
-          uri: http://localhost:8081
-          predicates:
-            - Path=/api/v1/users/**
-          filters:
-            - JwtTokenFilterFactory
-        - id: hospitality-service-1
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/v1/hotels/**
-          filters:
-            - JwtTokenFilterFactory
-        - id: hospitality-service-3
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/v1/restaurants/**
-          filters:
-            - JwtTokenFilterFactory
-        - id: promotions-service
-          uri: http://localhost:8083
-          predicates:
-            - Path=/api/v1/promotions/**
-          filters:
-            - JwtTokenFilterFactory
-        - id: sales-service-1
-          uri: http://localhost:8084
-          predicates:
-            - Path=/api/v1/consumptions/**
-          filters:
-            - JwtTokenFilterFactory
-        - id: sales-service-2
-          uri: http://localhost:8084
-          predicates:
-            - Path=/api/v1/invoices/**
-          filters:
-            - JwtTokenFilterFactory
-        - id: reviews-service
-          uri: http://localhost:8085
-          predicates:
-            - Path=/api/v1/reviews/**
-          filters:
-            - JwtTokenFilterFactory
-  profiles:
-    active: debug
-server:
-  port: 8080
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server-svc.default.svc.cluster.local/eureka/
