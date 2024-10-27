@@ -8,6 +8,10 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/v1/users/**
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
 eureka:
   client:
     service-url:
