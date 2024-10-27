@@ -6,13 +6,15 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @Configuration
 public class GatewayCorsConfiguration {
 
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.addAllowedOriginPattern("*"); // Permite todos los orígenes
+        corsConfig.setAllowedOrigins(Arrays.asList("http://35.196.192.110"));
         corsConfig.addAllowedMethod("*");        // Permite todos los métodos (GET, POST, etc.)
         corsConfig.addAllowedHeader("*");        // Permite todos los encabezados
         corsConfig.setAllowCredentials(true);    // Permite credenciales si es necesario
