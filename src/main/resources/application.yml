@@ -16,10 +16,26 @@ spring:
           uri: lb://catalog-svc
           predicates:
             - Path=/api/v1/catalog/**
+          filters:
+            - JwtTokenFilter
         - id: stores-service
           uri: lb://stores-svc
           predicates:
             - Path=/api/v1/stores/**
+          filters:
+            - JwtTokenFilter
+        - id: orders-service
+          uri: lb://orders-svc
+          predicates:
+            - Path=/api/v1/orders/**
+          filters:
+            - JwtTokenFilter
+        - id: shipments-service
+          uri: lb://shipments-svc
+          predicates:
+            - Path=/api/v1/shipments/**
+          filters:
+            - JwtTokenFilter
       discovery:
         locator:
           enabled: true
