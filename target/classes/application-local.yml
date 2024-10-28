@@ -5,26 +5,19 @@ spring:
     gateway:
       routes:
         - id: user-service
-          uri: lb://users-svc
+          uri: http://35.237.124.228
           predicates:
             - Path=/api/v1/users/**
         - id: auth-service
-          uri: lb://users-svc
+          uri: http://35.237.124.228
           predicates:
             - Path=/api/v1/auth/**
         - id: catalog-service
           uri: lb://catalog-svc
           predicates:
             - Path=/api/v1/catalog/**
-        - id: stores-service
-          uri: lb://stores-svc
-          predicates:
-            - Path=/api/v1/stores/**
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka-server-svc.default.svc.cluster.local:8761/eureka/
+      defaultZone: http://34.138.194.76:8761/eureka/
+
