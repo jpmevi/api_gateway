@@ -40,11 +40,8 @@ public class JwtTokenFilterFactory extends AbstractGatewayFilterFactory<Object> 
                     return Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token JWT inválido o expirado"));
                 }
 
-                // Obtener el rol del token
-                String role = jwtService.getRoleFromToken(token);
-
-                // Configurar una autenticación básica basada en el token
-                AbstractAuthenticationToken auth = new AbstractAuthenticationToken(List.of(new SimpleGrantedAuthority(role))) {
+                // Configurar una autenticación básica basada en el token, sin rol
+                AbstractAuthenticationToken auth = new AbstractAuthenticationToken(null) {
                     @Override
                     public Object getCredentials() {
                         return token;
