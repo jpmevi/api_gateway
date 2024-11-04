@@ -36,6 +36,12 @@ spring:
             - Path=/api/v1/shipments/**
           filters:
             - JwtTokenFilterFactory
+        - id: incidents-service
+          uri: lb://incidents-svc
+          predicates:
+            - Path=/api/v1/incidents/**
+          filters:
+            - JwtTokenFilterFactory
         - id: reports-service
           uri: lb://reports-svc
           predicates:
