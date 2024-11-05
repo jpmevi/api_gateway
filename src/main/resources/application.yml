@@ -48,6 +48,12 @@ spring:
             - Path=/api/v1/reports/**
           filters:
             - JwtTokenFilterFactory
+        - id: devolutions-service
+          uri: lb://devolutions-svc
+          predicates:
+            - Path=/api/v1/devolutions/**
+          filters:
+            - JwtTokenFilterFactory
       discovery:
         locator:
           enabled: true
